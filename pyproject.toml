@@ -17,6 +17,7 @@ openpyxl = "^3.1.5"
 google-generativeai = "^0.7.1"
 newspaper3k = "^0.2.8"
 lxml = {extras = ["html-clean"], version = "^5.2.2"}
+python-dotenv = "^1.0.1"
 
 
 [build-system]

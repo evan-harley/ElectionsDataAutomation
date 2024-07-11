@@ -15,7 +15,7 @@ from NewsArticle import NewsArticle
 
 
 class NewsDataScraper:
-    def __init__(self, base):
+    def __init__(self, base, api_key):
         self.getter = GNews(
             language='en', 
             country='CA', 
@@ -25,7 +25,7 @@ class NewsDataScraper:
         self.engine:Engine = create_engine(f"sqlite:///NewsArticles.db", echo=True)
         base.metadata.create_all(self.engine)
         self.filter: KeywordFilter = KeywordFilter()
-        genai.configure(api_key='AIzaSyC96LzBiQK6xJlP8ZzKIlD4_JTplx5IuSk')
+        genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel(model_name='gemini-1.5-flash',
                                            safety_settings={
                                             'HATE': 'BLOCK_NONE',
