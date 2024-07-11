@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "electionsdataautomation"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+gnews = "^0.3.7"
+sqlalchemy = "^2.0.31"
+yake = {git = "https://github.com/LIAAD/yake"}
+tqdm = "^4.66.4"
+numpy = "^2.0.0"
+pandas = "^2.2.2"
+openpyxl = "^3.1.5"
+google-generativeai = "^0.7.1"
+newspaper3k = "^0.2.8"
+lxml = {extras = ["html-clean"], version = "^5.2.2"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
