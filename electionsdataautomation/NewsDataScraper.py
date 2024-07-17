@@ -1,6 +1,5 @@
 import os
-from datetime import datetime
-from datetime import date
+from datetime import datetime, date, timedelta
 
 from gnews import GNews
 import google.generativeai as genai
@@ -19,7 +18,7 @@ class NewsDataScraper:
         self.getter = GNews(
             language='en', 
             country='CA', 
-            start_date=date(2024, 6, 1),
+            start_date=date.today() - timedelta(days=7),
             end_date=date.today())
         
         self.engine:Engine = create_engine(f"sqlite:///NewsArticles.db", echo=True)
@@ -109,7 +108,7 @@ class NewsDataScraper:
 
     def write_to_db(self):
         articles = self.get_filtered_articles()
-        articles = [ NewsArticle(
+        articles = [NewsArticle(
             title=article['title'],
             description=article['description'],
             date=datetime.strptime(article['published date'], '%a, %d %b %Y %H:%M:%S %Z'),
