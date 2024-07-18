@@ -40,4 +40,3 @@ class KeywordFilter:
         ]
 
         self.extractor = yake.KeywordExtractor(n=4)
-

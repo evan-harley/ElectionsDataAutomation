@@ -11,13 +11,14 @@ gnews = "^0.3.7"
 sqlalchemy = "^2.0.31"
 yake = {git = "https://github.com/LIAAD/yake"}
 tqdm = "^4.66.4"
-numpy = "^2.0.0"
+numpy = ">=1.19.0,<2.0.0"
 pandas = "^2.2.2"
 openpyxl = "^3.1.5"
 google-generativeai = "^0.7.1"
 newspaper3k = "^0.2.8"
 lxml = {extras = ["html-clean"], version = "^5.2.2"}
 python-dotenv = "^1.0.1"
+spacy = "^3.7.5"
 
 
 [build-system]

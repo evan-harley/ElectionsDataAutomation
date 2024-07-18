@@ -1,6 +1,7 @@
 import os
 from datetime import datetime, date, timedelta
 
+import spacy
 from gnews import GNews
 import google.generativeai as genai
 import pandas as pd
@@ -33,6 +34,8 @@ class NewsDataScraper:
                                             }
                                            )
 
+        self.nlp = spacy.load('en_core_web_lg')
+
     def get_articles(self, query):
 
         articles = self.getter.get_news(query)
@@ -45,36 +48,26 @@ class NewsDataScraper:
 
         for person in self.filter.people:
             topic_list.append(f"British Columbia AND {person}")
-        hashes = []
+        vectors = []
         for query in tqdm(topic_list):
             temp = self.get_articles(query)
             for article in temp:
-                desc_hash = hash((article['description'], article['published date'], article['publisher']['href']))
-                # to_include = self.article_includes_transportation(article)
-                to_include = True
-                if desc_hash not in hashes and to_include:
+                title_vector = self.nlp(article['title'])
+                if self.get_similarity(title_vector, vectors):
                     articles.append(article)
-                    hashes.append(desc_hash)
+                    vectors.append(title_vector)
                 else:
                     continue
 
         return articles
-
-
-    def filter_articles(self, article):
-        if article.text is None:
-            return ''
-        response = self.model.generate_content(
-            f"""
-            Please indicate whether or not the following aricle is related to 
-            BC Government Transportation and Infrastructure Initiatives. Please
-            respond with yes or no followed by an explanation.
-            
-            {article.text} 
-            
-            """
-        )
-        return response.text
+    @staticmethod
+    def get_similarity(vector, vectors):
+        if not vectors:
+            return True
+        for old_vector in vectors:
+            if vector.similarity(old_vector) >= 0.8:
+                return False
+        return True
 
 
     def summary_extraction(self, article):
@@ -135,7 +128,7 @@ class NewsDataScraper:
                     'summary': self.summary_extraction(self.getter.get_full_article(article['url'])),
                     'url': article['url']
                 }
-                for article in articles
+                for article in tqdm(articles)
             ]
             article_df = pd.DataFrame.from_records(articles)
             article_df.to_excel('articles.xlsx', index=False)
